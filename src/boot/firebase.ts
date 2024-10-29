@@ -1,6 +1,7 @@
 import { boot } from 'quasar/wrappers'
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+// import { LocalStorage } from 'quasar'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCyeGQB_nObxWMYPxIUbCp09Slv933ogXY',
@@ -18,4 +19,14 @@ export default boot(({ app }) => {
   app.config.globalProperties.$firebaseAuth = auth
 })
 
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    const idToken = await user.getIdToken()
+    localStorage.setItem('Token', idToken)
+    localStorage.setItem('user', JSON.stringify(user))
+  } else {
+    localStorage.removeItem('user')
+    localStorage.removeItem('Token')
+  }
+})
 export { auth }

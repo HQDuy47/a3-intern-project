@@ -1,5 +1,6 @@
+/* eslint-disable space-before-function-paren */
 import { defineComponent, computed } from 'vue'
-import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 import { useAuthStore } from '../store/authStore'
 
 export default defineComponent({

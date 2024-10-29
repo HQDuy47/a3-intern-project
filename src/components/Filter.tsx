@@ -1,14 +1,12 @@
-import { defineComponent, watch, ref, watchEffect } from 'vue'
+/* eslint-disable space-before-function-paren */
+import { defineComponent, ref } from 'vue'
 import AddTaskModal from './AddTaskModal'
 import ava1 from 'src/assets/images/ava1.png'
 import { RouterLink } from 'vue-router'
-import { useAuthStore } from '../store/authStore'
 
 export default defineComponent({
   name: 'Filter',
   setup() {
-    const { user } = useAuthStore()
-
     const showModal = ref(false)
 
     const openModal = () => {
@@ -42,9 +40,9 @@ export default defineComponent({
           </RouterLink>
 
           <i class="material-icons-outlined text-3xl">mail</i>
-          <p>
+          {/* <p>
             Hi, <span>{user.displayName}</span>
-          </p>
+          </p> */}
           <RouterLink to="/profile">
             <img src={ava1} alt="ava1" class="h-8 w-8 rounded-full " />
           </RouterLink>

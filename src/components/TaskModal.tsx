@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 import { defineComponent, PropType } from 'vue'
 
 export default defineComponent({
@@ -98,7 +99,7 @@ export default defineComponent({
                       <p>December 5, 2023</p>
                     </div>
                   </div>
-                  {/*TYPE*/}
+                  {/* TYPE */}
                   <div class="flex flex-row w-full items-center">
                     <div class="basis-2/5  flex flex-row items-center gap-2">
                       <i class="material-icons-outlined cursor-pointer">
@@ -112,7 +113,7 @@ export default defineComponent({
                       </div>
                     </div>
                   </div>
-                  {/*TEAM*/}
+                  {/* TEAM */}
                   {/* <div class="flex flex-row  w-full items-center">
                     <div class="basis-2/5  flex flex-row items-center gap-2">
                       <i class="material-icons-outlined cursor-pointer">
@@ -124,7 +125,7 @@ export default defineComponent({
                       <p>{props.task.team}</p>
                     </div>
                   </div> */}
-                  {/*DESCRIPTION*/}
+                  {/* DESCRIPTION */}
                   <div class="flex flex-row w-full items-center ">
                     <div class="basis-2/5  flex flex-row items-center gap-2">
                       <i class="material-icons-outlined cursor-pointer">
