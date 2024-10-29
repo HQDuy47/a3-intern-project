@@ -1,8 +1,7 @@
-// src/types/User.ts
 export interface User {
-  uid?: string // User ID from Firebase
-  email?: string // User's email address
-  displayName?: string | null // User's display name (optional)
-  photoURL?: string | null // User's profile picture URL (optional)
+  uid?: string
+  email?: string
+  displayName?: string | null
+  photoURL?: string | null
   // Add any other relevant properties
 }

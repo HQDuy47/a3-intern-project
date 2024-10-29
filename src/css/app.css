@@ -10,6 +10,16 @@ body * {
   font-family: 'DM Sans', 'Corben', sans-serif;
 }
 
+.logo {
+  display: none;
+}
+
+@media screen and (min-width: 769px) {
+  .logo {
+    display: block;
+  }
+}
+
 /* Tùy chỉnh thanh cuộn cho toàn bộ trang */
 ::-webkit-scrollbar {
   width: 8px; /* Độ rộng thanh cuộn dọc */

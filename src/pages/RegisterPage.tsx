@@ -1,6 +1,7 @@
 import { defineComponent, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useAuthStore } from '../store/authStore'
+import imgBg from '../assets/images/image-bg.png'
 
 export default defineComponent({
   name: 'RegisterPage',
@@ -54,15 +55,15 @@ export default defineComponent({
       <div class="bg-[#f6f5f3] h-[100vh] flex flex-wrap flex-row justify-center items-center">
         <div class="w-[1170px] max-w-[calc(100%-48px)] mx-auto flex flex-wrap flex-row justify-center items-center">
           {/* LEFT */}
-          {/* <div class="px-20 ">
+          <div class="logo px-20 ">
             <div class="py-8 bg-[#ffff] rounded-[70px] relative h-[430px] max-w-[390px] min-w-[400px]">
               <img
-                src={img_bg}
+                src={imgBg}
                 alt="logo-bg"
                 class="h-[370px] w-[440px] absolute left-[50px]"
               />
             </div>
-          </div> */}
+          </div>
 
           {/* RIGHT */}
           <div class="py-2 flex flex-col flex-wrap justify-center items-center gap-8">
