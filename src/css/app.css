@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Corben:wght@400;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lexend:wght@100..900&display=swap');
+body {
+  background: #f2f2f2;
+  color: #444;
+  margin: 0;
+}
+body * {
+  font-family: 'DM Sans', 'Corben', sans-serif;
+}
+
+/* Tùy chỉnh thanh cuộn cho toàn bộ trang */
+::-webkit-scrollbar {
+  width: 8px; /* Độ rộng thanh cuộn dọc */
+  height: 8px; /* Chiều cao thanh cuộn ngang */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Màu nền của thanh cuộn */
+  border-radius: 10px; /* Bo tròn cho nền thanh cuộn */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #dfdfdf; /* Màu của thanh cuộn */
+  border-radius: 10px; /* Bo tròn cho thanh cuộn */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d8d8d8; /* Màu khi hover trên thanh cuộn */
+}
+
+.wheel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.wheel {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 5px solid #333;
+  overflow: hidden;
+  transition: transform 3s ease-out;
+}
+
+.segment {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform-origin: 0 100%;
+  width: 50%;
+  height: 50%;
+  background-color: #f39c12;
+  border: 1px solid #fff;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+.segment-label {
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  transform: translateY(-50%) rotate(45deg);
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.spin-button {
+  margin-top: 20px;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.prize-announcement {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* animation */
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-enter-active {
+  transition: all 2s ease;
+}
+
+.fade-leave-from {
+  opacity: 1;
+}
+.fade-enter-to {
+  opacity: 0;
+}
+.fade-leave-active {
+  transition: all 2s ease;
+}
+
+/* list transitions */
+.list-enter-from {
+  opacity: 0;
+  transform: scale(0.6);
+}
+.list-enter-to {
+  opacity: 1;
+  transform: scale(1);
+}
+.list-enter-active {
+  transition: all 0.4s ease;
+}
+.list-leave-from {
+  opacity: 1;
+  transform: scale(1);
+}
+.list-leave-to {
+  opacity: 0;
+  transform: scale(0.6);
+}
+.list-leave-active {
+  transition: all 0.5s ease;
+  position: absolute;
+}
+
+.list-move {
+  transition: all 0.3s ease;
+}
+
+/* switch  */
+.switch-enter-from,
+.switch-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.switch-enter-to,
+.switch-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+.switch-enter-active {
+  transition: all 0.5s ease;
+}
+.switch-leave-active {
+  transition: all 0.5s ease;
+}
