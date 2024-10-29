@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 import { defineComponent } from 'vue'
 import { RouterView } from 'vue-router'
 import Filter from '../components/Filter'

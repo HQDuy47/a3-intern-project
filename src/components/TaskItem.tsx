@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 import { defineComponent, ref } from 'vue'
 import TaskModal from './TaskModal'
 

@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 import { defineComponent, reactive, ref } from 'vue'
 import { useAuthStore } from '../store/authStore'
 import ava1 from 'src/assets/images/ava1.png'
@@ -5,7 +6,7 @@ import ava1 from 'src/assets/images/ava1.png'
 export default defineComponent({
   name: 'ProfilePage',
   setup() {
-    const { user, updateUserProfile } = useAuthStore()
+    const { user } = useAuthStore()
     console.log('user:', user.uid)
     const isOpen = ref(false)
 
@@ -19,12 +20,12 @@ export default defineComponent({
     }
 
     const handleSaveChanges = async () => {
-      try {
-        await updateUserProfile(user.uid, formData.username)
-        console.log(user.uid)
-      } catch (error) {
-        console.error('Error saving profile changes:', error)
-      }
+      // try {
+      //   await updateUserProfile(user.uid, formData.username)
+      //   console.log(user.uid)
+      // } catch (error) {
+      //   console.error('Error saving profile changes:', error)
+      // }
     }
 
     const handleCancel = () => {
@@ -89,7 +90,7 @@ export default defineComponent({
             </div>
             <div class="flex-1">
               <div class="flex flex-row justify-between items-center">
-                {isOpen.value ? (
+                {/* {isOpen.value ? (
                   <input
                     type="email"
                     placeholder="Type your email here"
@@ -98,7 +99,7 @@ export default defineComponent({
                   />
                 ) : (
                   <p class="underline underline-offset-1">{formData.email}</p>
-                )}
+                )} */}
 
                 <button
                   class="px-3 py-[6px] border-[1px] text-xs border-solid border-black rounded-full font-bold text-center hover:bg-gray-100"

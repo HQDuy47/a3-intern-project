@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 const path = require('path')
 const { configure } = require('quasar/wrappers')
 
@@ -116,6 +117,7 @@ module.exports = configure(function (ctx) {
 
       analyze: false,
       // extractCSS: false,
+      // eslint-disable-next-line space-before-function-paren
       chainWebpack(cfg, { isClient, isServer }) {
         // tsx
         cfg.module

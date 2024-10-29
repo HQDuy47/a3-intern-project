@@ -1,10 +1,10 @@
 import { defineComponent, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import img_bg from 'src/assets/images/image-bg.png'
 import { useAuthStore } from '../store/authStore'
 
 export default defineComponent({
   name: 'LoginPage',
+  // eslint-disable-next-line space-before-function-paren
   setup() {
     const authStore = useAuthStore()
     const email = ref('')
@@ -53,15 +53,15 @@ export default defineComponent({
       <div class="bg-[#f6f5f3] h-[100vh] flex flex-wrap flex-row justify-center items-center">
         <div class="w-[1170px] max-w-[calc(100%-48px)] mx-auto flex flex-wrap flex-row justify-center items-center">
           {/* LEFT */}
-          <div class="px-20">
+          {/* <div class="px-20">
             <div class="py-8 bg-[#ffff] rounded-[70px] relative h-[430px] max-w-[390px] min-w-[400px]">
               <img
-                src={img_bg}
+                src={imgBg}
                 alt="logo-bg"
                 class="h-[370px] w-[440px] absolute left-[50px]"
               />
             </div>
-          </div>
+          </div> */}
 
           {/* RIGHT */}
           <div class="py-2 flex flex-col flex-wrap justify-center items-center gap-8 ">
