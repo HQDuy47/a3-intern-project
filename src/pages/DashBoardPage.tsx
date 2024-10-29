@@ -1,5 +1,6 @@
+/* eslint-disable space-before-function-paren */
 import { defineComponent } from 'vue'
-import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'DashBoardPage',

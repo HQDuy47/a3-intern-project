@@ -16,6 +16,7 @@ export const useAuthStore = defineStore('auth', () => {
   const token = ref<string | null>(localStorage.getItem('authToken'))
   const loading = ref(false)
   const router = useRouter()
+  // let refreshInterval: any
 
   const notify = (message, type) => {
     Notify.create({
@@ -55,6 +56,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = userCredential.user
       notify('Login successful!', 'positive')
       router.push('/dashboard')
+      // startTokenRefresh()
     } catch (error) {
       console.error('Login error:', error)
       notify('Login failed. Please check your credentials.', 'negative')
@@ -70,11 +72,80 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = null
       notify('Logout successful!', 'positive')
       router.push('/login')
+      // stopTokenRefresh()
     } catch (error) {
       console.error('Logout error:', error)
       notify('Logout failed. Please try again.', 'negative')
     }
   }
+
+  const refreshToken = async () => {
+    const currentUser = auth.currentUser
+    if (currentUser) {
+      try {
+        const idToken = await currentUser.getIdToken(true)
+        token.value = idToken
+        localStorage.setItem('Token', idToken)
+        console.log('Token refreshed:', idToken)
+      } catch (error) {
+        console.error('Error refreshing token:', error)
+      }
+    }
+  }
+
+  const checkTokenExpiration = async () => {
+    const currentUser = auth.currentUser
+    if (currentUser) {
+      try {
+        const idTokenResult = await currentUser.getIdTokenResult()
+        const { expirationTime } = idTokenResult
+        const now = new Date().getTime()
+        const isExpired = new Date(expirationTime).getTime() < now
+
+        if (isExpired) {
+          console.warn('Token has expired.')
+          await refreshToken()
+        } else {
+          console.log('Token is still valid.')
+        }
+      } catch (error) {
+        console.error('Error checking token expiration:', error)
+      }
+    } else {
+      console.log('No user is currently signed in.')
+    }
+  }
+
+  // stimulate token expiration
+  // const checkTokenExpiration = async () => {
+  //   const expiredToken = localStorage.getItem('Token')
+
+  //   if (expiredToken) {
+  //     const expiredDate = new Date(new Date().getTime() - 1 * 60 * 1000)
+  //     if (expiredDate > new Date()) {
+  //       console.log('Token is still valid.')
+  //     } else {
+  //       console.warn('Token has expired.')
+  //       await refreshToken()
+  //     }
+  //   } else {
+  //     console.log('No token found in localStorage.')
+  //   }
+  // }
+
+  // const startTokenRefresh = () => {
+  //   if (refreshInterval) return // Ngăn chặn nhiều interval
+  //   refreshInterval = setInterval(() => {
+  //     checkTokenExpiration()
+  //   }, 5000)
+  // }
+
+  // const stopTokenRefresh = () => {
+  //   if (refreshInterval) {
+  //     clearInterval(refreshInterval)
+  //     refreshInterval = null
+  //   }
+  // }
 
   return {
     user,
@@ -82,6 +153,8 @@ export const useAuthStore = defineStore('auth', () => {
     token,
     register,
     login,
-    logout
+    logout,
+    refreshToken,
+    checkTokenExpiration
   }
 })
