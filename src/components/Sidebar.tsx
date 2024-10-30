@@ -20,6 +20,7 @@ export default defineComponent({
     const authStore = useAuthStore()
 
     const logout = () => {
+      window.location.reload()
       authStore.logout()
     }
 
