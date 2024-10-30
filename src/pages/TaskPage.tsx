@@ -10,11 +10,21 @@ export default defineComponent({
     const taskStore = useTaskStore()
     const { tasks } = storeToRefs(taskStore)
 
-    const handleCheck = (id) => {
-      const task = tasks.value.find((task) => task.id === id)
-      if (task) {
-        task.ischecked = !task.ischecked
+    const handleCheck = async (id) => {
+      try {
+        const task = tasks.value.find((task) => task.id === id)
+        if (task) {
+          // task.ischecked = !task.ischecked
+          await taskStore.toggleTaskCheck(id, task.ischecked)
+        }
+      } catch (error) {
+        console.error('Failed to update task:', error)
       }
+
+      // const task = tasks.value.find((task) => task.id === id)
+      // if (task) {
+      //   task.ischecked = !task.ischecked
+      // }
     }
 
     return { handleCheck, tasks }

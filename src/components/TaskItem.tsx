@@ -28,6 +28,7 @@ export default defineComponent({
     const closeModal = () => {
       showModal.value = false
     }
+
     return () => (
       <div>
         <div class="grid grid-cols-8 gap-4 text-xs font-bold w-full items-center text-[#7f7f7fff] px-4 py-3 hover:bg-[#fcfcfc] cursor-pointer ">

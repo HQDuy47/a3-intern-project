@@ -1,7 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref, watchEffect } from 'vue'
 import { Task } from '../interfaces/Task'
-import { GET_TASKS, ADD_TASK, UPDATE_TASK_DUEDATE_STAGE } from '../graphql/task'
+import {
+  GET_TASKS,
+  ADD_TASK,
+  UPDATE_TASK_DUEDATE_STAGE,
+  UPDATE_TASK_ISCHECKED,
+  DELETE_TASK
+} from '../graphql/task'
 import { fetchDataWithAuth } from '../utils/hasuraClient'
 import { Toast } from '../utils/Toast'
 
@@ -63,6 +69,35 @@ export const useTaskStore = defineStore('task', () => {
     }
   }
 
+  const toggleTaskCheck = async (taskId, currentIsChecked) => {
+    const newIsChecked = !currentIsChecked
+
+    try {
+      const response = await fetchDataWithAuth(UPDATE_TASK_ISCHECKED, {
+        id: taskId,
+        ischecked: newIsChecked
+      })
+
+      if (response.data.update_tasks.affected_rows > 0) {
+        const taskIndex = tasks.value.findIndex((task) => task.id === taskId)
+        tasks.value[taskIndex].ischecked = newIsChecked
+        Toast('Task check status updated', 'positive')
+      }
+    } catch (error) {
+      console.error('Error updating task check status:', error)
+    }
+  }
+
+  const deleteTaskById = async (id: string) => {
+    try {
+      await fetchDataWithAuth(DELETE_TASK, { id })
+      tasks.value = tasks.value.filter((task) => task.id !== id)
+      Toast('Task deleted', 'positive')
+    } catch (error) {
+      console.error('Error deleting task:', error)
+    }
+  }
+
   watchEffect(() => {
     getTasks()
   })
@@ -70,6 +105,8 @@ export const useTaskStore = defineStore('task', () => {
   return {
     tasks,
     addTask,
-    updateTaskDuedateStage
+    updateTaskDuedateStage,
+    toggleTaskCheck,
+    deleteTaskById
   }
 })
