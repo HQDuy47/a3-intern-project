@@ -40,10 +40,10 @@ export default defineComponent({
           </RouterLink>
 
           <i class="material-icons-outlined text-3xl">mail</i>
-          {/* <p>
-            Hi, <span>{user.displayName}</span>
-          </p> */}
-          <RouterLink to="/profile">
+          <p>
+            Hi, <span>Quoc Duy</span>
+          </p>
+          <RouterLink to="#!">
             <img src={ava1} alt="ava1" class="h-8 w-8 rounded-full " />
           </RouterLink>
         </div>

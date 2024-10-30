@@ -6,10 +6,8 @@ import {
   createUserWithEmailAndPassword,
   signOut
 } from 'firebase/auth'
-import { Notify } from 'quasar'
+import { Toast } from '../utils/Toast'
 import { useRouter } from 'vue-router'
-
-const NOTIFY_TIMEOUT = 1000
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<any | null>(null)
@@ -17,15 +15,6 @@ export const useAuthStore = defineStore('auth', () => {
   const loading = ref(false)
   const router = useRouter()
   // let refreshInterval: any
-
-  const notify = (message, type) => {
-    Notify.create({
-      type,
-      message,
-      position: 'bottom',
-      timeout: NOTIFY_TIMEOUT
-    })
-  }
 
   const register = async (email, password) => {
     loading.value = true
@@ -36,10 +25,10 @@ export const useAuthStore = defineStore('auth', () => {
         password
       )
       user.value = userCredential.user
-      notify('Registration successful!', 'positive')
+      Toast('Registration successful!', 'positive')
     } catch (error) {
       console.error('Registration error:', error)
-      notify('Registration failed. Please try again.', 'negative')
+      Toast('Registration failed. Please try again.', 'negative')
     } finally {
       loading.value = false
     }
@@ -54,12 +43,12 @@ export const useAuthStore = defineStore('auth', () => {
         password
       )
       user.value = userCredential.user
-      notify('Login successful!', 'positive')
+      Toast('Login successful!', 'positive')
       router.push('/dashboard')
       // startTokenRefresh()
     } catch (error) {
       console.error('Login error:', error)
-      notify('Login failed. Please check your credentials.', 'negative')
+      Toast('Login failed. Please check your credentials.', 'negative')
     } finally {
       loading.value = false
     }
@@ -70,12 +59,12 @@ export const useAuthStore = defineStore('auth', () => {
       await signOut(auth)
       user.value = null
       token.value = null
-      notify('Logout successful!', 'positive')
+      Toast('Logout successful!', 'positive')
       router.push('/login')
       // stopTokenRefresh()
     } catch (error) {
       console.error('Logout error:', error)
-      notify('Logout failed. Please try again.', 'negative')
+      Toast('Logout failed. Please try again.', 'negative')
     }
   }
 
