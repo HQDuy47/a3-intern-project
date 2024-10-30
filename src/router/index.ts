@@ -39,7 +39,7 @@ export default route<any>(function (/* { store, ssrContext } */) {
   //   }
   // })
   Router.beforeEach((to, from, next) => {
-    const isLoggedIn = localStorage.getItem('Token') !== null // Kiểm tra xem người dùng đã đăng nhập chưa
+    const isLoggedIn = localStorage.getItem('Token') !== null
 
     if (!isLoggedIn && to.path !== '/login' && to.path !== '/register') {
       next('/login')
@@ -47,9 +47,9 @@ export default route<any>(function (/* { store, ssrContext } */) {
       isLoggedIn &&
       (to.path === '/login' || to.path === '/register')
     ) {
-      next('/')
+      next('/dashboard')
     } else {
-      next() // Tiếp tục nếu điều kiện hợp lệ
+      next()
     }
   })
 

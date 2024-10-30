@@ -44,5 +44,22 @@ mutation UpdateTaskDuedateStage( $id: String, $duedate: date, $stage: String) {
     }
   }
 }
+`
 
+export const UPDATE_TASK_ISCHECKED = `
+mutation UpdateTaskIsChecked($id: String, $ischecked: Boolean!) {
+  update_tasks(where: {id: {_eq: $id}}, _set: {ischecked: $ischecked}) {
+    affected_rows
+    returning {
+      ischecked
+    }
+  }
+}
+`
+export const DELETE_TASK = `
+mutation DeleteTaskById($id: String) {
+  delete_tasks(where: { id: { _eq: $id } }) {
+    affected_rows
+  }
+}
 `
