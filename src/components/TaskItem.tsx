@@ -1,6 +1,8 @@
 /* eslint-disable space-before-function-paren */
 import { defineComponent, ref } from 'vue'
 import TaskModal from './TaskModal'
+import { useTaskStore } from '../store/taskStore'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'TaskItem',
@@ -19,7 +21,11 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const taskStore = useTaskStore()
+    const { page, pageSize } = storeToRefs(taskStore)
     const showModal = ref(false)
+    const startIndex = (page.value - 1) * pageSize.value
+    const displayIndex = props.index + 1 + startIndex
 
     const openModal = () => {
       showModal.value = true
@@ -33,7 +39,7 @@ export default defineComponent({
       <div>
         <div class="grid grid-cols-8 gap-4 text-xs font-bold w-full items-center text-[#7f7f7fff] px-4 py-3 hover:bg-[#fcfcfc] cursor-pointer ">
           <div class="text-start pl-2">
-            <p>{props.index + 1}</p>
+            <p>{displayIndex}</p>
           </div>
           <div class="col-span-2">
             <div class="flex gap-2 flex-row items-center justify-start flex-nowrap">
