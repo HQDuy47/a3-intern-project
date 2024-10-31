@@ -60,14 +60,31 @@ export default defineComponent({
     return (
       <div class="pt-3 flex flex-nowrap flex-col  h-full justify-start">
         <div class="px-4 flex flex-row justify-end items-center gap-2 bg-white w-full pt-3 pb-3 rounded-t-xl">
-          <button class="p-2 bg-[#fff] text-xs rounded-xl shadow">
+          <button class="p-2 bg-[#fff] text-xs rounded-lg shadow">
             Due Date
           </button>
-          <button class="p-2 bg-[#fff] text-xs rounded-xl shadow">Stage</button>
-          <button class="p-2 bg-[#fff] text-xs rounded-xl shadow">
+          <button class="p-2 bg-[#fff] text-xs rounded-lg shadow">Stage</button>
+          {/* <select
+            class="p-2 bg-[#fff] text-xs rounded-lg shadow cursor-pointer active:outline-none"
+            // v-model={newStage.value}
+          >
+            <option value="All" class="bg-[#fff]">
+              All
+            </option>
+            <option value="Not started" class="bg-[#fff]">
+              Not started
+            </option>
+            <option value="In progress" class="bg-[#fff]">
+              In progress
+            </option>
+            <option value="Done" class="bg-[#fff]">
+              Done
+            </option>
+          </select> */}
+          <button class="p-2 bg-[#fff] text-xs rounded-lg shadow">
             Priority
           </button>
-          <i class="material-icons-outlined text-[14px]">filter_list</i>
+          <i class="material-icons-outlined text-[14px] px-1">filter_list</i>
         </div>
         <hr class="solid" />
         <div class="w-full bg-[#fff] pt-4 pb-2 rounded-b-xl">
@@ -94,15 +111,16 @@ export default defineComponent({
               <p>ASSIGNEE</p>
             </div>
           </div>
-          <div class="overflow-y-auto h-[56vh] max-h-[400px]">
+          <hr class="solid" />
+          <div class="overflow-y-auto h-[56vh] max-h-[400px] pt-1">
             {tasks.map((task, index) => (
               <div key={task.id}>
-                <hr class="solid" />
                 <TaskItem
                   index={index}
                   task={task}
                   onCheck={() => handleCheck(task.id)}
                 />
+                <hr class="solid" />
               </div>
             ))}
           </div>

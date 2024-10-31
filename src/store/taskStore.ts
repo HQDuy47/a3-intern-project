@@ -7,7 +7,8 @@ import {
   UPDATE_TASK_DUEDATE_STAGE,
   UPDATE_TASK_ISCHECKED,
   DELETE_TASK,
-  GET_TASKS
+  GET_TASKS,
+  GET_SEARCH_SUGGESTIONS
 } from '../graphql/task'
 import { fetchDataWithAuth } from '../utils/hasuraClient'
 import { Toast } from '../utils/Toast'
@@ -17,6 +18,8 @@ export const useTaskStore = defineStore('task', () => {
   const page = ref(1)
   const pageSize = ref(7)
   const totalTasks = ref(0)
+  const searchTerm = ref('')
+  const suggestions = ref<Task[]>([])
 
   const getTotalTasks = async () => {
     try {
@@ -27,12 +30,13 @@ export const useTaskStore = defineStore('task', () => {
     }
   }
 
-  const getTasks = async (page = 1, pageSize = 10) => {
+  const getTasks = async (page = 1, pageSize = 10, search = '') => {
     const offset = (page - 1) * pageSize
     try {
       const res = await fetchDataWithAuth(GET_TASKS, {
         limit: pageSize,
-        offset
+        offset,
+        searchTerm: `%${search}%`
       })
       tasks.value = res.data.tasks
     } catch (error) {
@@ -138,6 +142,30 @@ export const useTaskStore = defineStore('task', () => {
     }
   }
 
+  const getSearchSuggestions = async (term) => {
+    try {
+      const res = await fetchDataWithAuth(GET_SEARCH_SUGGESTIONS, {
+        searchTerm: `%${term}%`
+      })
+      suggestions.value = res.data.tasks
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const setSearchTerm = (term) => {
+    searchTerm.value = term
+    getTasks(page.value, pageSize.value, term)
+    if (term) {
+      totalTasks.value = tasks.value.length
+    } else {
+      getTotalTasks()
+    }
+  }
+
+  const setSuggestions = (suggestions) => {
+    getSearchSuggestions(suggestions)
+  }
   // onMounted(() => {
   //   getTotalTasks() // Chỉ gọi một lần khi store khởi tạo
   //   getTasks(page.value, pageSize.value) // Chỉ gọi một lần khi store khởi tạo
@@ -160,6 +188,10 @@ export const useTaskStore = defineStore('task', () => {
     nextPage,
     previousPage,
     getTotalTasks,
-    getTasks
+    getTasks,
+    searchTerm,
+    setSearchTerm,
+    suggestions,
+    setSuggestions
   }
 })

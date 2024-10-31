@@ -60,8 +60,16 @@ mutation DeleteTaskById($id: String) {
 `
 
 export const GET_TASKS = `
-  query GetTasks($limit: Int, $offset: Int) {
-    tasks(limit: $limit, offset: $offset) {
+ query GetTasks($limit: Int, $offset: Int, $searchTerm: String) {
+    tasks(
+      limit: $limit, 
+      offset: $offset, 
+      where: {
+        _or: [
+          { title: { _ilike: $searchTerm } },
+        ]
+      }
+    ) {
       id
       title
       description
@@ -74,3 +82,11 @@ export const GET_TASKS = `
     }
   }
 `
+
+export const GET_SEARCH_SUGGESTIONS = `
+query GetSearchSuggestions($searchTerm: String) {
+  tasks(where: { title: { _ilike: $searchTerm } }, limit: 5) {
+    id
+    title
+  }
+}`
