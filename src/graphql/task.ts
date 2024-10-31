@@ -1,17 +1,12 @@
-export const GET_TASKS = `
-  query {
-    tasks {
-    ischecked
-    assignee
-    description
-    duedate
-    priority
-    stage
-    title
-    type
-    id
+export const GET_TOTAL_TASKS = `
+query GetTasks {
+ tasks_aggregate {
+      aggregate {
+        count
+      }
     }
-  }
+}
+    
 `
 
 export const ADD_TASK = `
@@ -62,4 +57,20 @@ mutation DeleteTaskById($id: String) {
     affected_rows
   }
 }
+`
+
+export const GET_TASKS = `
+  query GetTasks($limit: Int, $offset: Int) {
+    tasks(limit: $limit, offset: $offset) {
+      id
+      title
+      description
+      type
+      duedate
+      stage
+      priority
+      assignee
+      ischecked
+    }
+  }
 `

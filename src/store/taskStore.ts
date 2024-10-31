@@ -1,22 +1,39 @@
 import { defineStore } from 'pinia'
-import { ref, watchEffect } from 'vue'
+import { ref } from 'vue'
 import { Task } from '../interfaces/Task'
 import {
-  GET_TASKS,
+  GET_TOTAL_TASKS,
   ADD_TASK,
   UPDATE_TASK_DUEDATE_STAGE,
   UPDATE_TASK_ISCHECKED,
-  DELETE_TASK
+  DELETE_TASK,
+  GET_TASKS
 } from '../graphql/task'
 import { fetchDataWithAuth } from '../utils/hasuraClient'
 import { Toast } from '../utils/Toast'
 
 export const useTaskStore = defineStore('task', () => {
   const tasks = ref<Task[]>([])
+  const page = ref(1)
+  const pageSize = ref(7)
+  const totalTasks = ref(0)
 
-  const getTasks = async () => {
+  const getTotalTasks = async () => {
     try {
-      const res = await fetchDataWithAuth(GET_TASKS)
+      const res = await fetchDataWithAuth(GET_TOTAL_TASKS)
+      totalTasks.value = res.data.tasks_aggregate?.aggregate?.count || 0
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getTasks = async (page = 1, pageSize = 10) => {
+    const offset = (page - 1) * pageSize
+    try {
+      const res = await fetchDataWithAuth(GET_TASKS, {
+        limit: pageSize,
+        offset
+      })
       tasks.value = res.data.tasks
     } catch (error) {
       console.log(error)
@@ -47,6 +64,10 @@ export const useTaskStore = defineStore('task', () => {
         ischecked: false
       }
       tasks.value = [...tasks.value, newTask]
+      totalTasks.value += 1
+      if (tasks.value.length > pageSize.value) {
+        nextPage()
+      }
       Toast('Add task success', 'positive')
     } catch (error) {
       console.log(error)
@@ -92,21 +113,53 @@ export const useTaskStore = defineStore('task', () => {
     try {
       await fetchDataWithAuth(DELETE_TASK, { id })
       tasks.value = tasks.value.filter((task) => task.id !== id)
+      totalTasks.value -= 1
+      if (tasks.value.length < 1) {
+        console.log(tasks.value.length, pageSize.value)
+        previousPage()
+      }
       Toast('Task deleted', 'positive')
     } catch (error) {
       console.error('Error deleting task:', error)
     }
   }
 
-  watchEffect(() => {
-    getTasks()
-  })
+  const nextPage = () => {
+    if (page.value * pageSize.value < totalTasks.value) {
+      page.value += 1
+      getTasks(page.value, pageSize.value)
+    }
+  }
+
+  const previousPage = () => {
+    if (page.value > 1) {
+      page.value -= 1
+      getTasks(page.value, pageSize.value)
+    }
+  }
+
+  // onMounted(() => {
+  //   getTotalTasks() // Chỉ gọi một lần khi store khởi tạo
+  //   getTasks(page.value, pageSize.value) // Chỉ gọi một lần khi store khởi tạo
+  // })
+
+  // // Watchers để tự động gọi `getTasks` khi `page` hoặc `pageSize` thay đổi
+  // watch([page, pageSize], () => {
+  //   getTasks(page.value, pageSize.value)
+  // })
 
   return {
     tasks,
     addTask,
     updateTaskDuedateStage,
     toggleTaskCheck,
-    deleteTaskById
+    deleteTaskById,
+    page,
+    totalTasks,
+    pageSize,
+    nextPage,
+    previousPage,
+    getTotalTasks,
+    getTasks
   }
 })
