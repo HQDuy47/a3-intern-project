@@ -5,6 +5,7 @@ import ava1 from 'src/assets/images/ava1.png'
 import { RouterLink } from 'vue-router'
 import { useTaskStore } from '../store/taskStore'
 import { storeToRefs } from 'pinia'
+import _ from 'lodash'
 
 export default defineComponent({
   name: 'Filter',
@@ -20,10 +21,10 @@ export default defineComponent({
       page.value = 1
     }
 
-    const suggestionTasks = () => {
+    const suggestionTasks = _.debounce(() => {
       isOpen.value = true
       taskStore.setSuggestions(searchTerm.value)
-    }
+    }, 500)
 
     const selectSuggestion = (suggestion) => {
       searchTerm.value = suggestion.title
@@ -81,7 +82,7 @@ export default defineComponent({
                   <li
                     key={suggestion.id}
                     class={[
-                      'p-2 cursor-pointer',
+                      'p-2 cursor-pointer text-sm',
                       highlightedIndex.value === index
                         ? 'bg-gray-200'
                         : 'hover:bg-gray-100'
