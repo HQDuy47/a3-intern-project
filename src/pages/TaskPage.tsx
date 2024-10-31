@@ -1,5 +1,5 @@
 /* eslint-disable space-before-function-paren */
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import TaskItem from '../components/TaskItem'
 import { useTaskStore } from '../store/taskStore'
 import { storeToRefs } from 'pinia'
@@ -8,29 +8,54 @@ export default defineComponent({
   name: 'TaskPage',
   setup() {
     const taskStore = useTaskStore()
-    const { tasks } = storeToRefs(taskStore)
+    const { tasks, page, totalTasks, pageSize } = storeToRefs(taskStore)
+
+    onMounted(async () => {
+      await taskStore.getTotalTasks()
+      await taskStore.getTasks(page.value, pageSize.value)
+    })
 
     const handleCheck = async (id) => {
       try {
         const task = tasks.value.find((task) => task.id === id)
         if (task) {
-          // task.ischecked = !task.ischecked
           await taskStore.toggleTaskCheck(id, task.ischecked)
         }
       } catch (error) {
         console.error('Failed to update task:', error)
       }
-
-      // const task = tasks.value.find((task) => task.id === id)
-      // if (task) {
-      //   task.ischecked = !task.ischecked
-      // }
     }
 
-    return { handleCheck, tasks }
+    const handleNextPage = () => {
+      taskStore.nextPage()
+    }
+
+    const handlePreviousPage = () => {
+      taskStore.previousPage()
+    }
+
+    return {
+      handleCheck,
+      tasks,
+      page,
+      totalTasks,
+      pageSize,
+      handleNextPage,
+      handlePreviousPage
+    }
   },
   render() {
-    const { handleCheck, tasks } = this
+    const {
+      handleCheck,
+      tasks,
+      page,
+      totalTasks,
+      pageSize,
+      handleNextPage,
+      handlePreviousPage
+    } = this
+
+    const totalPages = Math.ceil(totalTasks / pageSize)
 
     return (
       <div class="pt-3 flex flex-nowrap flex-col  h-full justify-start">
@@ -49,7 +74,6 @@ export default defineComponent({
           <div class="grid grid-cols-8 gap-4 text-xs font-bold w-full items-center text-[#7f7f7fff] px-4 pb-3">
             <div>
               <p>NO.</p>
-              {/* <p class="text-[#231c16ff] text-[16px]">NO.</p> */}
             </div>
             <div class="col-span-2">
               <p class="">TASK</p>
@@ -81,6 +105,26 @@ export default defineComponent({
                 />
               </div>
             ))}
+          </div>
+          {/* Pagination Controls */}
+          <div class="flex justify-end items-center px-4 pt-2 pb-2 gap-3">
+            <button
+              onClick={handlePreviousPage}
+              disabled={page === 1}
+              class="p-2 bg-[#fff] text-xs rounded-lg shadow-sm"
+            >
+              Previous
+            </button>
+            <span class="text-sm">
+              {page} of {totalPages}
+            </span>
+            <button
+              onClick={handleNextPage}
+              disabled={page >= totalPages}
+              class="p-2 bg-[#fedf51] text-xs rounded-lg shadow-sm"
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>

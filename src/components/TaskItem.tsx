@@ -36,7 +36,7 @@ export default defineComponent({
             <p>{props.index + 1}</p>
           </div>
           <div class="col-span-2">
-            <div class="flex gap-2 flex-row items-center justify-start">
+            <div class="flex gap-2 flex-row items-center justify-start flex-nowrap">
               <div
                 class={`p-[1px] bg-[#f6f5f3] rounded-full border-solid border-[1.25px] border-[#6d6b69] cursor-pointer flex justify-center items-center ${
                   props.task.ischecked ? '' : 'p-[8px]'
