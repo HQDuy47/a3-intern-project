@@ -1,3 +1,2 @@
 // User
-// Authentication
 // Task management
