@@ -83,6 +83,31 @@ export const GET_TASKS = `
   }
 `
 
+export const GET_SORTED_TASK = `
+  query GetTasks($limit: Int, $offset: Int, $searchTerm: String, $orderBy: [tasks_order_by!]) {
+    tasks(
+      limit: $limit, 
+      offset: $offset, 
+      where: {
+        _or: [
+          { title: { _ilike: $searchTerm } },
+        ]
+      },
+      order_by: $orderBy
+    ) {
+      id
+      title
+      description
+      type
+      duedate
+      stage
+      priority
+      assignee
+      ischecked
+    }
+  }
+`
+
 export const GET_SEARCH_SUGGESTIONS = `
 query GetSearchSuggestions($searchTerm: String) {
   tasks(where: { title: { _ilike: $searchTerm } }, limit: 5) {

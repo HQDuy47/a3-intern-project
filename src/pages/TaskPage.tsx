@@ -1,5 +1,5 @@
 /* eslint-disable space-before-function-paren */
-import { defineComponent, onMounted } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import TaskItem from '../components/TaskItem'
 import { useTaskStore } from '../store/taskStore'
 import { storeToRefs } from 'pinia'
@@ -8,12 +8,29 @@ export default defineComponent({
   name: 'TaskPage',
   setup() {
     const taskStore = useTaskStore()
-    const { tasks, page, totalTasks, pageSize } = storeToRefs(taskStore)
+    const { tasks, page, totalTasks, pageSize, searchTerm } =
+      storeToRefs(taskStore)
+    const fieldSort = ref('')
 
     onMounted(async () => {
       await taskStore.getTotalTasks()
       await taskStore.getTasks(page.value, pageSize.value)
     })
+
+    const handleSelectSort = (field: string) => {
+      fieldSort.value = field
+    }
+
+    const handleSortChange = async (e) => {
+      const sortOrder = e.target.value // Get the selected sort order (asc or desc)
+      const orderBy: any = [{ [fieldSort.value]: sortOrder }] // Dynamically set the key for sorting
+      await taskStore.getSortedTasks(
+        page.value,
+        pageSize.value,
+        searchTerm.value,
+        orderBy
+      ) // Call getTasks with orderBy
+    }
 
     const handleCheck = async (id) => {
       try {
@@ -41,7 +58,10 @@ export default defineComponent({
       totalTasks,
       pageSize,
       handleNextPage,
-      handlePreviousPage
+      handlePreviousPage,
+      handleSelectSort,
+      fieldSort,
+      handleSortChange
     }
   },
   render() {
@@ -52,7 +72,10 @@ export default defineComponent({
       totalTasks,
       pageSize,
       handleNextPage,
-      handlePreviousPage
+      handlePreviousPage,
+      handleSelectSort,
+      fieldSort,
+      handleSortChange
     } = this
 
     const totalPages = Math.ceil(totalTasks / pageSize)
@@ -60,31 +83,45 @@ export default defineComponent({
     return (
       <div class="pt-3 flex flex-nowrap flex-col  h-full justify-start">
         <div class="px-4 flex flex-row justify-end items-center gap-2 bg-white w-full pt-3 pb-3 rounded-t-xl">
-          <button class="p-2 bg-[#fff] text-xs rounded-lg shadow">
+          <button
+            onClick={() => handleSelectSort('duedate')}
+            class={`${
+              fieldSort === 'duedate' ? 'bg-gray-200' : ''
+            } py-2 px-3 bg-[#fff] text-xs rounded-lg shadow hover:bg-gray-50`}
+          >
             Due Date
           </button>
-          <button class="p-2 bg-[#fff] text-xs rounded-lg shadow">Stage</button>
-          {/* <select
-            class="p-2 bg-[#fff] text-xs rounded-lg shadow cursor-pointer active:outline-none"
-            // v-model={newStage.value}
+          <button
+            onClick={() => handleSelectSort('stage')}
+            class={`${
+              fieldSort === 'stage' ? 'bg-gray-200' : ''
+            } py-2 px-3 bg-[#fff] text-xs rounded-lg shadow hover:bg-gray-50`}
           >
-            <option value="All" class="bg-[#fff]">
-              All
-            </option>
-            <option value="Not started" class="bg-[#fff]">
-              Not started
-            </option>
-            <option value="In progress" class="bg-[#fff]">
-              In progress
-            </option>
-            <option value="Done" class="bg-[#fff]">
-              Done
-            </option>
-          </select> */}
-          <button class="p-2 bg-[#fff] text-xs rounded-lg shadow">
+            Stage
+          </button>
+          <button
+            onClick={() => handleSelectSort('priority')}
+            class={`${
+              fieldSort === 'priority' ? 'bg-gray-200' : ''
+            } py-2 px-3 bg-[#fff] text-xs rounded-lg shadow hover:bg-gray-50`}
+          >
             Priority
           </button>
-          <i class="material-icons-outlined text-[14px] px-1">filter_list</i>
+          <select
+            onChange={(e) => handleSortChange(e)}
+            class="p-2 bg-[#fff] text-xs rounded-lg shadow cursor-pointer active:outline-none"
+          >
+            <option value="" selected disabled hidden>
+              Sort by
+            </option>
+            <option value="asc" class="bg-[#fff] ">
+              Ascending
+            </option>
+            <option value="desc" class="bg-[#fff]">
+              Descending
+            </option>
+          </select>
+          {/* <i class="material-icons-outlined text-[14px] px-1">filter_list</i> */}
         </div>
         <hr class="solid" />
         <div class="w-full bg-[#fff] pt-4 pb-2 rounded-b-xl">

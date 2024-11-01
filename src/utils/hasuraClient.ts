@@ -2,8 +2,10 @@
 import axios from 'axios'
 import { useAuthStore } from '../store/authStore'
 
-const HASURA_ENDPOINT = 'http://localhost:8080/v1/graphql'
-const ADMIN_SECRET = 'myadminsecretkey'
+// const HASURA_ENDPOINT = 'http://localhost:8080/v1/graphql'
+const HASURA_ENDPOINT = 'https://relaxed-gazelle-42.hasura.app/v1/graphql'
+const ADMIN_SECRET =
+  'EdcCAwK8VW5WbhVT6BbiAXe7WUptIEg2eRKRQ6mo6EUovr4eF5UY6XYIj3e3LxFy'
 
 export async function fetchDataWithAuth(query, variables = {}) {
   const authStore = useAuthStore()

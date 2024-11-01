@@ -1,0 +1,1 @@
+"use strict";(globalThis["webpackChunkquasar_vue3_tsx"]=globalThis["webpackChunkquasar_vue3_tsx"]||[]).push([[949],{8949:(a,s,u)=>{u.r(s),u.d(s,{default:()=>t});var e=u(9436),l=u(2836);const t=(0,e.pM)({name:"DashBoardPage",setup(){const a=(0,l.lq)();return()=>(0,e.bF)("div",null,[(0,e.bF)("h1",null,[a.path])])}})}}]);
