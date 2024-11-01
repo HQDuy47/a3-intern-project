@@ -8,7 +8,8 @@ import {
   UPDATE_TASK_ISCHECKED,
   DELETE_TASK,
   GET_TASKS,
-  GET_SEARCH_SUGGESTIONS
+  GET_SEARCH_SUGGESTIONS,
+  GET_SORTED_TASK
 } from '../graphql/task'
 import { fetchDataWithAuth } from '../utils/hasuraClient'
 import { Toast } from '../utils/Toast'
@@ -37,6 +38,26 @@ export const useTaskStore = defineStore('task', () => {
         limit: pageSize,
         offset,
         searchTerm: `%${search}%`
+      })
+      tasks.value = res.data.tasks
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getSortedTasks = async (
+    page = 1,
+    pageSize = 10,
+    search = '',
+    orderBy = []
+  ) => {
+    const offset = (page - 1) * pageSize
+    try {
+      const res = await fetchDataWithAuth(GET_SORTED_TASK, {
+        limit: pageSize,
+        offset,
+        searchTerm: `%${search}%`,
+        orderBy
       })
       tasks.value = res.data.tasks
     } catch (error) {
@@ -192,6 +213,7 @@ export const useTaskStore = defineStore('task', () => {
     searchTerm,
     setSearchTerm,
     suggestions,
-    setSuggestions
+    setSuggestions,
+    getSortedTasks
   }
 })

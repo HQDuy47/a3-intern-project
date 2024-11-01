@@ -209,6 +209,9 @@ export default defineComponent({
                       priorityError.value ? 'border border-red-500' : ''
                     }`}
                   >
+                    <option value="" selected disabled hidden>
+                      Select priority
+                    </option>
                     <option value="High">High</option>
                     <option value="Medium">Medium</option>
                     <option value="Low">Low</option>
@@ -230,6 +233,9 @@ export default defineComponent({
                       typeError.value ? 'border border-red-500' : ''
                     }`}
                   >
+                    <option value="" selected disabled hidden>
+                      Select type
+                    </option>
                     <option value="Design">Design</option>
                     <option value="Development">Development</option>
                     <option value="Documentation">Documentation</option>

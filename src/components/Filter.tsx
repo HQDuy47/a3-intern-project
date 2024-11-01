@@ -63,37 +63,39 @@ export default defineComponent({
     return () => (
       <div class="w-full bg-[#fff] rounded-xl p-2 flex flex-row items-center justify-between min-w-[800px] max-w-[2000px]">
         <div class="w-[40%]">
-          <div class="bg-[#f6f5f3] rounded-xl w-full px-2 py-1 relative">
-            <i class="material-icons text-lg px-1">search</i>
-            <input
-              type="text"
-              v-model={searchTerm.value}
-              placeholder="Search"
-              class=" px-2 py-1 w-[80%] bg-[#f6f5f3] outline-none"
-              onKeyup={onKeyup}
-              onKeydown={onKeydown}
-              onInput={suggestionTasks}
-            />
-            <ul class="absolute top-8 left-8 bg-white shadow-md rounded-md mt-1 w-[90%] ">
-              {searchTerm.value.length > 0 &&
-                suggestions.value.length > 0 &&
-                isOpen.value &&
-                suggestions.value.map((suggestion, index) => (
-                  <li
-                    key={suggestion.id}
-                    class={[
-                      'p-2 cursor-pointer text-sm',
-                      highlightedIndex.value === index
-                        ? 'bg-gray-200'
-                        : 'hover:bg-gray-100'
-                    ]}
-                    onClick={() => selectSuggestion(suggestion)}
-                  >
-                    {suggestion.title}
-                  </li>
-                ))}
-            </ul>
-          </div>
+          <RouterLink to="/my-tasks">
+            <div class="bg-[#f6f5f3] rounded-xl w-full px-2 py-1 relative">
+              <i class="material-icons text-lg px-1">search</i>
+              <input
+                type="text"
+                v-model={searchTerm.value}
+                placeholder="Search"
+                class=" px-2 py-1 w-[80%] bg-[#f6f5f3] outline-none"
+                onKeyup={onKeyup}
+                onKeydown={onKeydown}
+                onInput={suggestionTasks}
+              />
+              <ul class="absolute top-8 left-8 bg-white shadow-md rounded-md mt-1 w-[90%] ">
+                {searchTerm.value.length > 0 &&
+                  suggestions.value.length > 0 &&
+                  isOpen.value &&
+                  suggestions.value.map((suggestion, index) => (
+                    <li
+                      key={suggestion.id}
+                      class={[
+                        'p-2 cursor-pointer text-sm',
+                        highlightedIndex.value === index
+                          ? 'bg-gray-200'
+                          : 'hover:bg-gray-100'
+                      ]}
+                      onClick={() => selectSuggestion(suggestion)}
+                    >
+                      {suggestion.title}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          </RouterLink>
         </div>
         <div class="flex flex-row items-center justify-between gap-6">
           <RouterLink to="/my-tasks">
