@@ -15,7 +15,8 @@ const routes = [
       },
       {
         path: '/my-tasks',
-        component: () => import('../pages/TaskPage')
+        component: () => import('../pages/TaskPage'),
+        props: true
       },
       {
         path: '/notifications',

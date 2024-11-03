@@ -86,14 +86,15 @@ export const GET_TASKS = `
 export const GET_SORTED_TASK = `
   query GetTasks($limit: Int, $offset: Int, $searchTerm: String, $orderBy: [tasks_order_by!]) {
     tasks(
-      limit: $limit, 
-      offset: $offset, 
+     
       where: {
         _or: [
           { title: { _ilike: $searchTerm } },
         ]
       },
       order_by: $orderBy
+      limit: $limit, 
+      offset: $offset, 
     ) {
       id
       title

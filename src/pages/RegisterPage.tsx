@@ -46,7 +46,6 @@ export default defineComponent({
 
     const onKeyup = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
-        console.log('ENTER')
         handleSubmit()
       }
     }
