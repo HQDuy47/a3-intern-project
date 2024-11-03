@@ -7,7 +7,7 @@ import {
   UPDATE_TASK_DUEDATE_STAGE,
   UPDATE_TASK_ISCHECKED,
   DELETE_TASK,
-  GET_TASKS,
+  // GET_TASKS,
   GET_SEARCH_SUGGESTIONS,
   GET_SORTED_TASK
 } from '../graphql/task'
@@ -21,6 +21,9 @@ export const useTaskStore = defineStore('task', () => {
   const totalTasks = ref(0)
   const searchTerm = ref('')
   const suggestions = ref<Task[]>([])
+  const fieldSort = ref('duedate')
+  const sortOrder = ref('asc')
+  const loading = ref(false)
 
   const getTotalTasks = async () => {
     try {
@@ -31,38 +34,52 @@ export const useTaskStore = defineStore('task', () => {
     }
   }
 
-  const getTasks = async (page = 1, pageSize = 10, search = '') => {
-    const offset = (page - 1) * pageSize
+  // const getTasks = async (page = 1, pageSize = 10, search = '') => {
+  //   const offset = (page - 1) * pageSize
+  //   try {
+  //     const res = await fetchDataWithAuth(GET_TASKS, {
+  //       limit: pageSize,
+  //       offset,
+  //       searchTerm: `%${search}%`
+  //     })
+  //     tasks.value = res.data.tasks
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+
+  const getTasks = async (
+    currentPage = 1,
+    currentPageSize = 7,
+    search = ''
+  ) => {
+    const offset = (currentPage - 1) * currentPageSize
+    loading.value = true
     try {
-      const res = await fetchDataWithAuth(GET_TASKS, {
-        limit: pageSize,
+      const res = await fetchDataWithAuth(GET_SORTED_TASK, {
+        limit: currentPageSize,
         offset,
-        searchTerm: `%${search}%`
+        searchTerm: `%${search}%`,
+        orderBy: [{ [fieldSort.value]: sortOrder.value }]
       })
+      console.log(sortOrder.value)
+      console.log(res.data.tasks)
       tasks.value = res.data.tasks
     } catch (error) {
       console.log(error)
+    } finally {
+      loading.value = false
     }
   }
 
-  const getSortedTasks = async (
-    page = 1,
-    pageSize = 10,
-    search = '',
-    orderBy = []
-  ) => {
-    const offset = (page - 1) * pageSize
-    try {
-      const res = await fetchDataWithAuth(GET_SORTED_TASK, {
-        limit: pageSize,
-        offset,
-        searchTerm: `%${search}%`,
-        orderBy
-      })
-      tasks.value = res.data.tasks
-    } catch (error) {
-      console.log(error)
-    }
+  const setFieldSort = (newField) => {
+    fieldSort.value = newField
+    getTasks()
+  }
+
+  const setSortOrder = (newOrder) => {
+    sortOrder.value = newOrder
+    getTasks()
   }
 
   const addTask = async (taskData: {
@@ -214,6 +231,10 @@ export const useTaskStore = defineStore('task', () => {
     setSearchTerm,
     suggestions,
     setSuggestions,
-    getSortedTasks
+
+    sortOrder,
+    setFieldSort,
+    setSortOrder,
+    loading
   }
 })

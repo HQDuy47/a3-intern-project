@@ -7,7 +7,7 @@ export default defineComponent({
   name: 'ProfilePage',
   setup() {
     const { user } = useAuthStore()
-    console.log('user:', user.uid)
+
     const isOpen = ref(false)
 
     const formData = reactive({

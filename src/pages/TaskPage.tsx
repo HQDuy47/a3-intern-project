@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable multiline-ternary */
 /* eslint-disable space-before-function-paren */
 import { defineComponent, onMounted, ref } from 'vue'
 import TaskItem from '../components/TaskItem'
@@ -8,9 +10,9 @@ export default defineComponent({
   name: 'TaskPage',
   setup() {
     const taskStore = useTaskStore()
-    const { tasks, page, totalTasks, pageSize, searchTerm } =
+    const { tasks, page, totalTasks, pageSize, sortOrder, loading } =
       storeToRefs(taskStore)
-    const fieldSort = ref('')
+    const fieldSort = ref('duedate')
 
     onMounted(async () => {
       await taskStore.getTotalTasks()
@@ -22,14 +24,9 @@ export default defineComponent({
     }
 
     const handleSortChange = async (e) => {
-      const sortOrder = e.target.value // Get the selected sort order (asc or desc)
-      const orderBy: any = [{ [fieldSort.value]: sortOrder }] // Dynamically set the key for sorting
-      await taskStore.getSortedTasks(
-        page.value,
-        pageSize.value,
-        searchTerm.value,
-        orderBy
-      ) // Call getTasks with orderBy
+      sortOrder.value = e.target.value
+      taskStore.setFieldSort(fieldSort.value)
+      taskStore.setSortOrder(sortOrder.value)
     }
 
     const handleCheck = async (id) => {
@@ -61,7 +58,8 @@ export default defineComponent({
       handlePreviousPage,
       handleSelectSort,
       fieldSort,
-      handleSortChange
+      handleSortChange,
+      loading
     }
   },
   render() {
@@ -75,7 +73,8 @@ export default defineComponent({
       handlePreviousPage,
       handleSelectSort,
       fieldSort,
-      handleSortChange
+      handleSortChange,
+      loading
     } = this
 
     const totalPages = Math.ceil(totalTasks / pageSize)
@@ -150,16 +149,31 @@ export default defineComponent({
           </div>
           <hr class="solid" />
           <div class="overflow-y-auto h-[56vh] max-h-[400px] pt-1">
-            {tasks.map((task, index) => (
-              <div key={task.id}>
-                <TaskItem
-                  index={index}
-                  task={task}
-                  onCheck={() => handleCheck(task.id)}
-                />
-                <hr class="solid" />
-              </div>
-            ))}
+            {loading
+              ? Array.from({ length: 7 }).map((_, index) => (
+                  <div
+                    key={index}
+                    class="flex items-center space-x-4 py-2 animate-pulse"
+                  >
+                    <div class="h-4 w-4 bg-gray-200 rounded-full"></div>
+                    <div class="flex-1 h-4 bg-gray-200 rounded"></div>
+                    <div class="h-4 w-24 bg-gray-200 rounded"></div>
+                    <div class="h-4 w-16 bg-gray-200 rounded"></div>
+                    <div class="h-4 w-16 bg-gray-200 rounded"></div>
+                    <div class="h-4 w-16 bg-gray-200 rounded"></div>
+                    <div class="h-4 w-16 bg-gray-200 rounded"></div>
+                  </div>
+                ))
+              : tasks.map((task, index) => (
+                  <div key={task.id}>
+                    <TaskItem
+                      index={index}
+                      task={task}
+                      onCheck={() => handleCheck(task.id)}
+                    />
+                    <hr class="solid" />
+                  </div>
+                ))}
           </div>
           {/* Pagination Controls */}
           <div class="flex justify-end items-center px-4 pt-2 pb-2 gap-3">
