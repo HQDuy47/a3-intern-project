@@ -9,13 +9,19 @@ import {
   DELETE_TASK,
   // GET_TASKS,
   GET_SEARCH_SUGGESTIONS,
-  GET_SORTED_TASK
+  GET_SORTED_TASK,
+  GET_TASK_STAGE,
+  GET_TASK_TYPE,
+  GET_TASK_ASSIGNEE
 } from '../graphql/task'
 import { fetchDataWithAuth } from '../utils/hasuraClient'
 import { Toast } from '../utils/Toast'
 
 export const useTaskStore = defineStore('task', () => {
   const tasks = ref<Task[]>([])
+  const taskStage = ref<any[]>([])
+  const taskType = ref<any[]>([])
+  const taskAssignee = ref<any[]>([])
   const page = ref(1)
   const pageSize = ref(7)
   const totalTasks = ref(0)
@@ -62,8 +68,7 @@ export const useTaskStore = defineStore('task', () => {
         searchTerm: `%${search}%`,
         orderBy: [{ [fieldSort.value]: sortOrder.value }]
       })
-      console.log(sortOrder.value)
-      console.log(res.data.tasks)
+
       tasks.value = res.data.tasks
     } catch (error) {
       console.log(error)
@@ -157,7 +162,6 @@ export const useTaskStore = defineStore('task', () => {
       tasks.value = tasks.value.filter((task) => task.id !== id)
       totalTasks.value -= 1
       if (tasks.value.length < 1) {
-        console.log(tasks.value.length, pageSize.value)
         previousPage()
       }
       Toast('Task deleted', 'positive')
@@ -204,6 +208,34 @@ export const useTaskStore = defineStore('task', () => {
   const setSuggestions = (suggestions) => {
     getSearchSuggestions(suggestions)
   }
+
+  const getTaskStages = async () => {
+    try {
+      const res = await fetchDataWithAuth(GET_TASK_STAGE)
+      taskStage.value = res.data.tasks
+      console.log(taskStage.value)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getTaskTypes = async () => {
+    try {
+      const res = await fetchDataWithAuth(GET_TASK_TYPE)
+      taskType.value = res.data.tasks
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getTaskAssignee = async () => {
+    try {
+      const res = await fetchDataWithAuth(GET_TASK_ASSIGNEE)
+      taskAssignee.value = res.data.tasks
+    } catch (error) {
+      console.log(error)
+    }
+  }
   // onMounted(() => {
   //   getTotalTasks() // Chỉ gọi một lần khi store khởi tạo
   //   getTasks(page.value, pageSize.value) // Chỉ gọi một lần khi store khởi tạo
@@ -216,6 +248,7 @@ export const useTaskStore = defineStore('task', () => {
 
   return {
     tasks,
+    taskStage,
     addTask,
     updateTaskDuedateStage,
     toggleTaskCheck,
@@ -231,10 +264,14 @@ export const useTaskStore = defineStore('task', () => {
     setSearchTerm,
     suggestions,
     setSuggestions,
-
+    getTaskStages,
     sortOrder,
     setFieldSort,
     setSortOrder,
-    loading
+    loading,
+    getTaskTypes,
+    taskType,
+    getTaskAssignee,
+    taskAssignee
   }
 })

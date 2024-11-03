@@ -43,6 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
         password
       )
       user.value = userCredential.user
+      localStorage.setItem('user', JSON.stringify(user))
       Toast('Login successful!', 'positive')
       router.push('/dashboard')
       // startTokenRefresh()

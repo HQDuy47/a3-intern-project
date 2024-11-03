@@ -27,6 +27,7 @@ export default defineComponent({
       sortOrder.value = e.target.value
       taskStore.setFieldSort(fieldSort.value)
       taskStore.setSortOrder(sortOrder.value)
+      page.value = 1
     }
 
     const handleCheck = async (id) => {
@@ -153,7 +154,7 @@ export default defineComponent({
               ? Array.from({ length: 7 }).map((_, index) => (
                   <div
                     key={index}
-                    class="flex items-center space-x-4 py-2 animate-pulse"
+                    class="flex items-center space-x-4 py-2 animate-pulse px-6"
                   >
                     <div class="h-4 w-4 bg-gray-200 rounded-full"></div>
                     <div class="flex-1 h-4 bg-gray-200 rounded"></div>
