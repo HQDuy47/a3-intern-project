@@ -4,6 +4,7 @@ import AddTaskModal from './AddTaskModal'
 import ava1 from 'src/assets/images/ava1.png'
 import { RouterLink } from 'vue-router'
 import { useTaskStore } from '../store/taskStore'
+
 import { storeToRefs } from 'pinia'
 import _ from 'lodash'
 
@@ -15,6 +16,8 @@ export default defineComponent({
     const showModal = ref(false)
     const isOpen = ref(true)
     const highlightedIndex = ref(-1)
+    const user = JSON.parse(localStorage.getItem('user') || '{}')
+    const username = user._value.email.split('@')[0]
 
     const searchTasks = () => {
       taskStore.setSearchTerm(searchTerm.value)
@@ -110,7 +113,7 @@ export default defineComponent({
 
           <i class="material-icons-outlined text-3xl">mail</i>
           <p>
-            Hi, <span>Quoc Duy</span>
+            Hi, <span>{username}</span>
           </p>
           <RouterLink to="#!">
             <img src={ava1} alt="ava1" class="h-8 w-8 rounded-full " />

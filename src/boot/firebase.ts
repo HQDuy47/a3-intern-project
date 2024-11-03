@@ -23,7 +23,7 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     const idToken = await user.getIdToken()
     localStorage.setItem('Token', idToken)
-    localStorage.setItem('user', JSON.stringify(user))
+    // localStorage.setItem('user', JSON.stringify(user))
   } else {
     localStorage.removeItem('user')
     localStorage.removeItem('Token')

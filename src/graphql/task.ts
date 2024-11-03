@@ -116,3 +116,25 @@ query GetSearchSuggestions($searchTerm: String) {
     title
   }
 }`
+
+export const GET_TASK_STAGE = `
+ query MyQuery {
+  tasks {
+    stage
+  }
+  }`
+
+export const GET_TASK_TYPE = `
+ query MyQuery {
+  tasks {
+    type
+  }
+  }`
+
+export const GET_TASK_ASSIGNEE = `
+query MyQuery {
+  tasks(distinct_on: assignee) {
+    assignee
+  }
+}
+`
